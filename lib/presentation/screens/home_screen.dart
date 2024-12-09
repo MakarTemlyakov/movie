@@ -142,70 +142,22 @@ class HomeScreenState extends State<HomeScreen>
               child: TabBarView(
                 controller: _tabController,
                 children: [
-                  Container(
-                    child: GridView.count(
-                      padding: EdgeInsets.all(0),
-                      mainAxisSpacing: 14.0,
+                  GridView.custom(
+                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 3,
-                      children: <Widget>[
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 140,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                        Container(
-                          child: Image.asset(
-                            "assets/images/moive-3.png",
-                            width: 100,
-                            height: 145,
-                          ),
-                        ),
-                      ],
+                      mainAxisSpacing: 14.0,
+                      crossAxisSpacing: 14.0,
+                      mainAxisExtent: 146,
                     ),
+                    childrenDelegate: SliverChildBuilderDelegate(
+                        (BuildContext context, int index) {
+                      return Container(
+                        child: Image.asset(
+                          "assets/images/moive-3.png",
+                          fit: BoxFit.fill,
+                        ),
+                      );
+                    }),
                   ),
                   Icon(Icons.directions_bike),
                   Icon(Icons.movie),
