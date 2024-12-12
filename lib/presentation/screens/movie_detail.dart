@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:moviedb/constants.dart';
 
 class MovieDetail extends StatelessWidget {
   const MovieDetail({super.key});
@@ -41,42 +40,69 @@ class MovieDetail extends StatelessWidget {
         ),
       ),
       body: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
+        // crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Stack(
-            children: [
-              Container(
-                width: double.infinity,
-                height: 295,
-                color: Colors.transparent,
-              ),
-              Image.asset(
-                "assets/images/bg.png",
-                width: double.infinity,
-                fit: BoxFit.fill,
-              ),
-              Positioned(
-                bottom: 10,
-                left: 30,
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.end,
-                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  children: [
-                    Image.asset("assets/images/spider-man.png"),
-                    SizedBox(
-                      width: 12,
-                    ),
-                    Text(
-                      "Spiderman No Way Home",
-                      style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w600),
-                    ),
-                  ],
+          SizedBox(
+            height: 270,
+            child: Stack(
+              children: [
+                Image.asset(
+                  "assets/images/bg.png",
+                  width: double.infinity,
+                  fit: BoxFit.fill,
+                  height: 210,
                 ),
-              ),
-            ],
+                Positioned(
+                  bottom: 70,
+                  right: 11,
+                  child: Container(
+                    decoration: BoxDecoration(
+                        color: Color.fromRGBO(37, 40, 54, 32),
+                        borderRadius: BorderRadius.circular(8)),
+                    padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                    child: Wrap(
+                      spacing: 4,
+                      children: [
+                        Icon(
+                          Icons.star_border,
+                          size: 16,
+                          color: Color.fromRGBO(255, 135, 0, 1),
+                        ),
+                        Text(
+                          '9.5',
+                          style: TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w600,
+                            color: Color.fromRGBO(255, 135, 0, 1),
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  left: 30,
+                  child: Row(
+                    crossAxisAlignment: CrossAxisAlignment.end,
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Image.asset("assets/images/spider-man.png"),
+                      SizedBox(
+                        width: 12,
+                      ),
+                      Text(
+                        "Spiderman No Way Home",
+                        style: TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w600),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 18,
@@ -171,8 +197,12 @@ class MovieDetail extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       TabBar(
-                        labelPadding:
-                            EdgeInsets.symmetric(horizontal: 0, vertical: 0),
+                        isScrollable: true,
+                        padding: EdgeInsets.only(left: 27),
+                        labelPadding: EdgeInsets.symmetric(
+                          horizontal: 12,
+                        ),
+                        tabAlignment: TabAlignment.start,
                         indicatorColor: Color.fromRGBO(58, 63, 71, 1),
                         unselectedLabelColor: Color.fromRGBO(255, 255, 255, 1),
                         labelColor: Color.fromRGBO(255, 255, 255, 1),
