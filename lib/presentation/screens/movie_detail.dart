@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moviedb/presentation/screens/widgets/movie_detail/movie_detail_tab_bar.dart';
 
 class MovieDetail extends StatelessWidget {
   const MovieDetail({super.key});
@@ -187,78 +188,7 @@ class MovieDetail extends StatelessWidget {
           SizedBox(
             height: 15,
           ),
-          Expanded(
-            child: DefaultTabController(
-              length: 3,
-              initialIndex: 1,
-              child: Builder(
-                builder: (context) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      TabBar(
-                        isScrollable: true,
-                        padding: EdgeInsets.only(left: 27),
-                        labelPadding: EdgeInsets.symmetric(
-                          horizontal: 12,
-                        ),
-                        tabAlignment: TabAlignment.start,
-                        indicatorColor: Color.fromRGBO(58, 63, 71, 1),
-                        unselectedLabelColor: Color.fromRGBO(255, 255, 255, 1),
-                        labelColor: Color.fromRGBO(255, 255, 255, 1),
-                        labelStyle: TextStyle(
-                            fontSize: 14, fontWeight: FontWeight.w400),
-                        dividerHeight: 0,
-                        controller: DefaultTabController.of(context),
-                        tabs: [
-                          Tab(
-                            text: "About Movie",
-                          ),
-                          Tab(
-                            text: "Reviews",
-                          ),
-                          Tab(
-                            text: "Cast",
-                          ),
-                        ],
-                      ),
-                      Expanded(
-                        child: TabBarView(children: [
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 29, vertical: 24),
-                            child: Text(
-                              "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 29, vertical: 24),
-                            child: Text(
-                              "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.symmetric(
-                                horizontal: 29, vertical: 24),
-                            child: Text(
-                              "From DC Comics comes the Suicide Squad, an antihero team of incarcerated supervillains who act as deniable assets for the United States government, undertaking high-risk black ops missions in exchange for commuted prison sentences.",
-                              style:
-                                  TextStyle(fontSize: 12, color: Colors.white),
-                            ),
-                          ),
-                        ]),
-                      ),
-                    ],
-                  );
-                },
-              ),
-            ),
-          ),
+          MovieDetailTabBar(),
         ],
       ),
     );

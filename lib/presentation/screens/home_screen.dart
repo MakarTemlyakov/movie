@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:moviedb/presentation/screens/widgets/bottom_nav_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -168,39 +169,7 @@ class HomeScreenState extends State<HomeScreen>
           ],
         ),
       ),
-      bottomNavigationBar: Container(
-        decoration: const BoxDecoration(
-            border: Border(
-                top: BorderSide(
-          color: Color.fromRGBO(2, 159, 229, 1),
-          width: 1.0,
-        ))),
-        child: BottomNavigationBar(
-          selectedItemColor: const Color.fromRGBO(2, 150, 229, 1),
-          unselectedItemColor: const Color.fromRGBO(103, 104, 109, 1),
-          items: const [
-            BottomNavigationBarItem(
-              label: "Home",
-              icon: Icon(
-                Icons.home_filled,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: "Home",
-              icon: Icon(
-                Icons.search,
-              ),
-            ),
-            BottomNavigationBarItem(
-              label: "Home",
-              icon: Icon(
-                Icons.bookmark_border,
-              ),
-            )
-          ],
-          backgroundColor: bgTheme,
-        ),
-      ),
+      bottomNavigationBar: BottomNavBar(),
     );
   }
 }
