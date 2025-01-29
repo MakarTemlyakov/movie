@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/presentation/screens/widgets/image_splash.dart';
+import 'package:moviedb/presentation/widgets/image_splash.dart';
 
 class SplashScreen extends StatelessWidget {
   const SplashScreen({super.key});

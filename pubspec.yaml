@@ -11,6 +11,11 @@ dependencies:
   cupertino_icons: ^1.0.8
   carousel_slider: ^5.0.0
   flutter_svg: ^2.0.16
+  dio: ^5.7.0
+  pretty_dio_logger: ^1.4.0
+  flutter_inappwebview: ^6.1.5
+  shared_preferences: ^2.3.5
+  intl: ^0.20.1
 
 dev_dependencies:
   flutter_test:
@@ -21,3 +26,4 @@ flutter:
   assets:
     - assets/images/
     - assets/icons/
+    - secrets.json
