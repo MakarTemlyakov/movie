@@ -18,7 +18,6 @@ class MovieDetailScreenBloc
 
   Future<void> _onLoadData(
       OnLoadMovieDetailDataEvent event, Emitter emit) async {
-    final bool isAddedToWatchList;
     final MovieDetail movie =
         await MovieRepository().getMovieDetail(event.movieId);
     final List<MovieReview> reviews =
@@ -26,7 +25,8 @@ class MovieDetailScreenBloc
     final List<MovieCast> cast =
         await MovieRepository().getCastByMovieId(event.movieId);
 
-    isAddedToWatchList = AppLocal.movieWatchList.contains(event.movieId);
+    final bool isAddedToWatchList =
+        AppLocal.movieWatchList.contains(event.movieId);
 
     emit(
       MovieDetailsState(
@@ -42,11 +42,10 @@ class MovieDetailScreenBloc
   Future<void> _addMovieToWatchList(
       OnAddMovieToWatchListEvent event, Emitter emit) async {
     final movieDetial = (state as MovieDetailsState);
+    await MovieRepository().addMovieToWatchList(
+        movieDetial.movieId, movieDetial.isAddedToWatchList);
     bool isAddedToWatchList =
         AppLocal.movieWatchList.contains(movieDetial.movieId);
-    await MovieRepository()
-        .addMovieToWatchList(movieDetial.movieId, isAddedToWatchList);
-
     emit(
       movieDetial.copyWith(
         movieDetial.movieId,
