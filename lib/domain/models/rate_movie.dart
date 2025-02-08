@@ -8,7 +8,7 @@ class Movie {
   final String overview;
   final double popularity;
   final String? posterPath;
-  final String releaseDate;
+  final String? releaseDate;
   final String title;
   final bool video;
   final String voteAverage;
@@ -42,7 +42,8 @@ class Movie {
       overview: json['overview'],
       popularity: json['popularity'],
       posterPath: json['poster_path'],
-      releaseDate: DateTime.parse(json['release_date']).year.toString(),
+      releaseDate: DateTime.tryParse(json['release_date'])?.year.toString() ??
+          "Information not found",
       title: json['title'],
       video: json['video'],
       voteAverage: json['vote_average'].toStringAsFixed(1),

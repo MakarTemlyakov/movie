@@ -103,7 +103,7 @@ class MovieListItem extends StatelessWidget {
                                           Colors.white, BlendMode.srcATop),
                                     ),
                                     Text(
-                                      watchMovie.releaseDate,
+                                      watchMovie.releaseDate!,
                                       style: TextStyle(
                                           fontSize: 16, color: Colors.white),
                                     ),

@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:moviedb/constants.dart';
-import 'package:moviedb/domain/models/movie_cast.dart';
-import 'package:moviedb/domain/models/movie_detail.dart';
-import 'package:moviedb/domain/models/movie_review.dart';
-import 'package:moviedb/internal/repositories/movie/movie_repository.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:moviedb/presentation/screens/movie_detail_screen/bloc/movie_detail_screen_bloc.dart';
 import 'package:moviedb/presentation/screens/splash_screen.dart';
 import 'package:moviedb/presentation/widgets/movie_detail/movie_detail_tab_bar.dart';
 import 'package:moviedb/presentation/widgets/movie_detail/reference_info.dart';
@@ -11,49 +8,24 @@ import 'package:moviedb/presentation/widgets/movie_title.dart';
 import 'package:moviedb/presentation/widgets/rate_info.dart';
 
 class MovieDetailScreen extends StatefulWidget {
-  final int id;
-
-  const MovieDetailScreen({super.key, required this.id});
+  const MovieDetailScreen({super.key});
 
   @override
   State<MovieDetailScreen> createState() => _MovieDetailScreenState();
 }
 
 class _MovieDetailScreenState extends State<MovieDetailScreen> {
-  MovieDetail? movie;
-  List<MovieReview>? reviews;
-  List<MovieCast>? cast;
-  bool isAddedToWatchList = false;
-
   @override
   void initState() {
     super.initState();
-    fetchData();
-    WidgetsBinding.instance.addPostFrameCallback((_) {
-      isAddedToWatchList = AppLocal.movieWatchList.contains(widget.id);
-      setState(() {});
-    });
-  }
-
-  void fetchData() async {
-    movie = await MovieRepository().getMovieDetail(widget.id);
-    reviews = await MovieRepository().getReviewsByMovieId(movie!.id!);
-    cast = await MovieRepository().getCastByMovieId(movie!.id!);
-    setState(() {});
-  }
-
-  void addMovieToWatchList(num movieId, bool isAddedToWatchList) async {
-    await MovieRepository().addMovieToWatchList(movieId, isAddedToWatchList);
-
-    setState(() {
-      this.isAddedToWatchList = AppLocal.movieWatchList.contains(widget.id);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return movie != null
-        ? Scaffold(
+    return BlocBuilder<MovieDetailScreenBloc, MovieDetailScreenState>(
+      builder: (context, state) {
+        if (state is MovieDetailsState && state.movie != null) {
+          return Scaffold(
             appBar: AppBar(
               backgroundColor: Colors.transparent,
               centerTitle: true,
@@ -62,10 +34,11 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   padding: EdgeInsets.only(right: 24),
                   child: IconButton(
                     onPressed: () {
-                      addMovieToWatchList(movie!.id!, isAddedToWatchList);
+                      BlocProvider.of<MovieDetailScreenBloc>(context)
+                        ..add(OnAddMovieToWatchListEvent());
                     },
                     icon: Icon(
-                      isAddedToWatchList
+                      state.isAddedToWatchList
                           ? Icons.bookmark
                           : Icons.bookmark_border,
                     ),
@@ -99,7 +72,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   child: Stack(
                     children: [
                       Image.network(
-                        "https://image.tmdb.org/t/p/w500${movie!.backdropPath}",
+                        "https://image.tmdb.org/t/p/w500${state.movie!.backdropPath}",
                         fit: BoxFit.fill,
                         height: 210,
                         width: double.infinity,
@@ -113,7 +86,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                               borderRadius: BorderRadius.circular(8)),
                           padding:
                               EdgeInsets.symmetric(vertical: 4, horizontal: 8),
-                          child: RateInfo(rate: movie!.voteAverage),
+                          child: RateInfo(rate: state.movie!.voteAverage),
                         ),
                       ),
                       Positioned(
@@ -126,7 +99,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                             ClipRRect(
                               borderRadius: BorderRadius.circular(16.0),
                               child: Image.network(
-                                "https://image.tmdb.org/t/p/w500${movie!.posterPath}",
+                                "https://image.tmdb.org/t/p/w500${state.movie!.posterPath}",
                                 width: 95,
                                 height: 120,
                                 fit: BoxFit.cover,
@@ -136,7 +109,7 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                               width: 12,
                             ),
                             MovieTitle(
-                              title: movie!.title,
+                              title: state.movie!.title,
                             ),
                           ],
                         ),
@@ -148,22 +121,25 @@ class _MovieDetailScreenState extends State<MovieDetailScreen> {
                   height: 18,
                 ),
                 ReferenceInfo(
-                  releaseDate: movie!.releaseDate,
-                  timeDelation: movie!.runtime,
-                  genres: movie!.genres,
+                  releaseDate: state.movie!.releaseDate,
+                  timeDelation: state.movie!.runtime,
+                  genres: state.movie!.genres,
                 ),
                 SizedBox(
                   height: 15,
                 ),
                 MovieDetailTabBar(
-                  reviews: reviews,
-                  about: movie!.overview!,
-                  cast: cast!,
+                  reviews: state.reviews,
+                  about: state.movie!.overview!,
+                  cast: state.cast!,
                 ),
               ],
             ),
-          )
-        : SplashScreen();
+          );
+        }
+        return SplashScreen();
+      },
+    );
   }
 }
 

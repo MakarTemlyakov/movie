@@ -2,7 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:flutter/material.dart';
 import 'package:moviedb/domain/models/rate_movie.dart';
 import 'package:collection/collection.dart';
-import 'package:moviedb/presentation/screens/movie_detail.dart';
+import 'package:moviedb/presentation/screens/movie_detail_screen/movie_detail.dart';
 
 class MovieCarouselWidget extends StatelessWidget {
   final List<Movie> rateMovies;

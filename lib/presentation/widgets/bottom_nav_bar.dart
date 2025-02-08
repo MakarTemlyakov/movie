@@ -24,7 +24,7 @@ class _BottomNavBarState extends State<BottomNavBar> {
         currentIndex: widget.screenIndex,
         onTap: (int index) {
           switch (index) {
-            case 0:
+            case   0:
               Navigator.pushReplacementNamed(context, "/");
             case 1:
               Navigator.pushReplacementNamed(context, "/search");

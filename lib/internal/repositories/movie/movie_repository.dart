@@ -15,8 +15,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class MovieRepository {
   late Dio dio;
   late SharedPreferences store;
-  static String requestTokenKey = "requestToken";
-  static String isAuthKey = "isAuth";
   String apiKey = "";
   String accessToken = "";
   MovieRepository() {
@@ -40,7 +38,7 @@ class MovieRepository {
       data = await dio.get(
           'https://api.themoviedb.org/3/trending/movie/week?api_key=${apiKey}');
     } catch (e) {
-      debugPrint('Error occurred: $e'); // Added error handling
+      debugPrint('Error occurred: $e');
     }
 
     return List<Map<String, dynamic>>.from(data.data["results"])
@@ -54,7 +52,7 @@ class MovieRepository {
       data = await dio.get(
           'https://api.themoviedb.org/3/movie/now_playing?api_key=${apiKey}');
     } catch (e) {
-      debugPrint('Error occurred: $e'); // Added error handling
+      debugPrint('Error occurred: $e');
     }
 
     return List<Map<String, dynamic>>.from(data.data["results"])
@@ -63,7 +61,7 @@ class MovieRepository {
   }
 
   Future<bool> getIsAuth() async {
-    return store.getBool(isAuthKey) ?? false;
+    return store.getBool(SharedPreferencesKeys.isAuthKey) ?? false;
   }
 
   Future<List<Movie>> getPopular() async {
@@ -86,7 +84,7 @@ class MovieRepository {
       data = await dio.get(
           'https://api.themoviedb.org/3/movie/top_rated?api_key=${apiKey}');
     } catch (e) {
-      debugPrint('Error occurred: $e'); // Added error handling
+      debugPrint('Error occurred: $e');
     }
 
     return List<Map<String, dynamic>>.from(data.data["results"])
@@ -114,7 +112,7 @@ class MovieRepository {
       data = await dio
           .get('https://api.themoviedb.org/3/movie/${id}?api_key=${apiKey}');
     } catch (e) {
-      debugPrint('Error occurred: $e'); // Added error handling
+      debugPrint('Error occurred: $e');
     }
 
     return MovieDetail.fromJson(data.data);
@@ -128,7 +126,8 @@ class MovieRepository {
     DateTime dateTimeNow = DateTime.now().toUtc();
 
     try {
-      final jsonDataToken = (await store.getString(requestTokenKey));
+      final jsonDataToken =
+          (await store.getString(SharedPreferencesKeys.requestTokenKey));
 
       if (jsonDataToken != "") {
         requestToken = RequestToken.fromJson(jsonDecode(jsonDataToken!));
@@ -158,7 +157,7 @@ class MovieRepository {
 
   Future<void> setIsAuthStatus(bool isAuth) async {
     final store = await SharedPreferences.getInstance();
-    await store.setBool(isAuthKey, isAuth);
+    await store.setBool(SharedPreferencesKeys.isAuthKey, isAuth);
   }
 
   Future<RequestToken> createNewRequestToken() async {
@@ -168,9 +167,10 @@ class MovieRepository {
       data = await dio.get(
           'https://api.themoviedb.org/3/authentication/token/new?api_key=${apiKey}');
       dio.options.headers['Authorization'] = "Bearer ${accessToken}";
-      await store.setString(requestTokenKey, jsonEncode(data.data));
-      requestToken = RequestToken.fromJson(
-          jsonDecode((await store.getString(requestTokenKey)!)));
+      await store.setString(
+          SharedPreferencesKeys.requestTokenKey, jsonEncode(data.data));
+      requestToken = RequestToken.fromJson(jsonDecode(
+          (await store.getString(SharedPreferencesKeys.requestTokenKey)!)));
     } catch (e) {
       debugPrint('Error occurred: $e');
     }
@@ -197,13 +197,13 @@ class MovieRepository {
   Future<List<Movie>?> getWatchListMovies() async {
     late dynamic data;
     try {
-      final requestToken = RequestToken.fromJson(
-          jsonDecode((await store.getString(requestTokenKey)!)));
+      final requestToken = RequestToken.fromJson(jsonDecode(
+          (await store.getString(SharedPreferencesKeys.requestTokenKey)!)));
       ;
-      var sessionId = store.getString("SessionId");
+      var sessionId = store.getString(SharedPreferencesKeys.sessionIdKey);
       if (sessionId == null) {
         sessionId = await createSessionId(requestToken.requestToken);
-        await store.setString("SessionId", sessionId);
+        await store.setString(SharedPreferencesKeys.sessionIdKey, sessionId);
       }
 
       data = await dio.get(
@@ -247,6 +247,7 @@ class MovieRepository {
 
   Future<List<Movie>> getSearchMovies(String searchQuery) async {
     late dynamic data;
+
     try {
       data = await dio.get(
           "https://api.themoviedb.org/3/search/movie?api_key=${apiKey}",
@@ -264,7 +265,7 @@ class MovieRepository {
     late dynamic data;
 
     try {
-      var sessionId = store.getString("SessionId");
+      var sessionId = store.getString(SharedPreferencesKeys.sessionIdKey);
       if (sessionId == null) {
         final requestToken = await getRequestToken();
         sessionId = await createSessionId(requestToken!.requestToken);
