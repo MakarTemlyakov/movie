@@ -11,7 +11,9 @@ part 'watch_list_screen_bloc_state.dart';
 
 class WatchListScreenBlocBloc
     extends Bloc<WatchListScreenBlocEvent, WatchListScreenBlocState> {
-  WatchListScreenBlocBloc() : super(WatchListScreenBlocInitial()) {
+  final MovieRepository _movieRepository;
+  WatchListScreenBlocBloc(this._movieRepository)
+      : super(WatchListScreenBlocInitial()) {
     on<OnChangeIsAuthStatus>(_onChangeAuthStatus);
     on<OnLoadDataEvent>(_onLoadData);
     on<OnCreateWebViewEvent>(_onCreateWebView);
@@ -20,21 +22,21 @@ class WatchListScreenBlocBloc
 
   Future<void> _onChangeAuthStatus(
       OnChangeIsAuthStatus e, Emitter emmit) async {
-    await MovieRepository().setIsAuthStatus(e.isAuth);
+    await _movieRepository.setIsAuthStatus(e.isAuth);
   }
 
   Future<void> _onLoadData(OnLoadDataEvent event, Emitter emmit) async {
     List<Movie>? watchMovies = [];
     late RequestToken? requestToken;
-    requestToken = (await MovieRepository().getRequestToken());
+    requestToken = (await _movieRepository.getRequestToken());
 
     if (requestToken != null) {
-      watchMovies = await MovieRepository().getWatchListMovies();
+      watchMovies = await _movieRepository.getWatchListMovies();
     } else {
-      requestToken = (await MovieRepository().createNewRequestToken());
+      requestToken = (await _movieRepository.createNewRequestToken());
     }
 
-    final bool isAuth = await MovieRepository().getIsAuth();
+    final bool isAuth = await _movieRepository.getIsAuth();
 
     emmit(
       WatchListState(
@@ -47,7 +49,7 @@ class WatchListScreenBlocBloc
 
   Future<void> _onCreateWebView(
       OnCreateWebViewEvent event, Emitter emmit) async {
-    final requestToken = await MovieRepository().getRequestToken();
+    final requestToken = await _movieRepository.getRequestToken();
     final URLRequest urlRequest = URLRequest(
       url: WebUri("https://www.themoviedb.org/authenticate/${requestToken}"),
     );
@@ -67,17 +69,17 @@ class WatchListScreenBlocBloc
     List<Movie>? watchMovies = [];
     bool isAuth = false;
     if (event.url!.endsWith("allow")) {
-      watchMovies = await MovieRepository().getWatchListMovies();
-      await MovieRepository().setIsAuthStatus(true);
+      watchMovies = await _movieRepository.getWatchListMovies();
+      await _movieRepository.setIsAuthStatus(true);
       if (state is WatchListState) {
         emmit((state as WatchListState).copyWith(
           watchList: watchMovies,
         ));
       }
     } else {
-      await MovieRepository().setIsAuthStatus(false);
+      await _movieRepository.setIsAuthStatus(false);
     }
-    isAuth = await MovieRepository().getIsAuth();
+    isAuth = await _movieRepository.getIsAuth();
 
     if (state is WebViewState) {
       emmit(

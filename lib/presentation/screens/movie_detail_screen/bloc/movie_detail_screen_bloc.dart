@@ -11,7 +11,9 @@ part 'movie_detail_screen_state.dart';
 
 class MovieDetailScreenBloc
     extends Bloc<MovieDetailScreenEvent, MovieDetailScreenState> {
-  MovieDetailScreenBloc() : super(MovieDetailScreenInitial()) {
+  final MovieRepository _movieRepository;
+  MovieDetailScreenBloc(this._movieRepository)
+      : super(MovieDetailScreenInitial()) {
     on<OnLoadMovieDetailDataEvent>(_onLoadData);
     on<OnAddMovieToWatchListEvent>(_addMovieToWatchList);
   }
@@ -19,11 +21,11 @@ class MovieDetailScreenBloc
   Future<void> _onLoadData(
       OnLoadMovieDetailDataEvent event, Emitter emit) async {
     final MovieDetail movie =
-        await MovieRepository().getMovieDetail(event.movieId);
+        await _movieRepository.getMovieDetail(event.movieId);
     final List<MovieReview> reviews =
-        await MovieRepository().getReviewsByMovieId(event.movieId);
+        await _movieRepository.getReviewsByMovieId(event.movieId);
     final List<MovieCast> cast =
-        await MovieRepository().getCastByMovieId(event.movieId);
+        await _movieRepository.getCastByMovieId(event.movieId);
 
     final bool isAddedToWatchList =
         AppLocal.movieWatchList.contains(event.movieId);
@@ -42,7 +44,7 @@ class MovieDetailScreenBloc
   Future<void> _addMovieToWatchList(
       OnAddMovieToWatchListEvent event, Emitter emit) async {
     final movieDetial = (state as MovieDetailsState);
-    await MovieRepository().addMovieToWatchList(
+    await _movieRepository.addMovieToWatchList(
         movieDetial.movieId, movieDetial.isAddedToWatchList);
     bool isAddedToWatchList =
         AppLocal.movieWatchList.contains(movieDetial.movieId);

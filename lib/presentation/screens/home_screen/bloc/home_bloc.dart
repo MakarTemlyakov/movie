@@ -7,7 +7,8 @@ part 'home_event.dart';
 part 'home_state.dart';
 
 class HomeBloc extends Bloc<HomeEvent, HomeState> {
-  HomeBloc() : super(HomeInitial()) {
+  final MovieRepository _movieRepository;
+  HomeBloc(this._movieRepository) : super(HomeInitial()) {
     on<OnLoadMoviesEvent>(_onloadMovieList);
     on<OnSearchMovies>(_onLoadSearchMovies);
   }
@@ -17,7 +18,7 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
       this.add(OnLoadMoviesEvent());
     } else {
       final searchMovies =
-          await MovieRepository().getSearchMovies(e.searchQuery ?? "");
+          await _movieRepository.getSearchMovies(e.searchQuery ?? "");
       emit(
         SearchMovies(searchMovies: searchMovies),
       );
@@ -25,13 +26,12 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   }
 
   Future<void> _onloadMovieList(OnLoadMoviesEvent e, Emitter emit) async {
-    final movieRepo = MovieRepository();
     final movieData = await Future.wait([
-      movieRepo.getRateMovies(),
-      movieRepo.getNowPlaying(),
-      movieRepo.getPopular(),
-      movieRepo.getUpcoming(),
-      movieRepo.getTopRated()
+      _movieRepository.getRateMovies(),
+      _movieRepository.getNowPlaying(),
+      _movieRepository.getPopular(),
+      _movieRepository.getUpcoming(),
+      _movieRepository.getTopRated()
     ]);
 
     emit(

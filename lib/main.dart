@@ -36,10 +36,11 @@ class MovieApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final movieRepo = new MovieRepository();
     return MultiBlocProvider(
         providers: [
           BlocProvider(
-              create: (context) => HomeBloc()
+              create: (context) => HomeBloc(movieRepo)
                 ..add(
                   OnLoadMoviesEvent(),
                 ),
@@ -49,18 +50,18 @@ class MovieApp extends StatelessWidget {
             child: SearchBarWidget(),
           ),
           BlocProvider(
-            create: (context) => SearchScreenBlocBloc(),
+            create: (context) => SearchScreenBlocBloc(movieRepo),
             child: SearchScreen(),
           ),
           BlocProvider(
-            create: (context) => WatchListScreenBlocBloc()
+            create: (context) => WatchListScreenBlocBloc(movieRepo)
               ..add(
                 OnLoadDataEvent(),
               ),
             child: WatchListScreen(),
           ),
           BlocProvider(
-            create: (context) => WatchListScreenBlocBloc()
+            create: (context) => WatchListScreenBlocBloc(movieRepo)
               ..add(
                 OnLoadDataEvent(),
               ),
@@ -86,7 +87,7 @@ class MovieApp extends StatelessWidget {
                   final args = settings.arguments as MovieDetailScreenArguments;
                   return MaterialPageRoute(builder: (context) {
                     return BlocProvider(
-                      create: (context) => MovieDetailScreenBloc()
+                      create: (context) => MovieDetailScreenBloc(movieRepo)
                         ..add(
                           OnLoadMovieDetailDataEvent(movieId: args.id),
                         ),

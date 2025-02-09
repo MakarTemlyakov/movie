@@ -8,13 +8,15 @@ part 'search_screen_bloc_state.dart';
 
 class SearchScreenBlocBloc
     extends Bloc<SearchScreenBlocEvent, SearchScreenBlocState> {
-  SearchScreenBlocBloc() : super(SearchScreenBlocInitial(movies: [])) {
+  final MovieRepository _movieRepository;
+  SearchScreenBlocBloc(this._movieRepository)
+      : super(SearchScreenBlocInitial(movies: [])) {
     on<OnLoadMovieDataEvent>(_onLoadMovieData);
   }
 
   Future<void> _onLoadMovieData(OnLoadMovieDataEvent e, Emitter emit) async {
     final searchMovies =
-        await MovieRepository().getSearchMovies(e.searchQuery ?? "");
+        await _movieRepository.getSearchMovies(e.searchQuery ?? "");
     emit(
       MovieListData(movies: searchMovies),
     );
