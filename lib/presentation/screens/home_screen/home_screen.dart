@@ -4,7 +4,7 @@ import 'package:moviedb/constants.dart';
 import 'package:moviedb/domain/models/rate_movie.dart';
 import 'package:moviedb/presentation/screens/home_screen/bloc/home_bloc.dart';
 import 'package:moviedb/presentation/screens/movie_detail_screen/movie_detail.dart';
-import 'package:moviedb/presentation/widgets/bottom_nav_bar.dart';
+import 'package:moviedb/routing/app_routing.dart';
 import 'package:moviedb/presentation/widgets/movie_carousel_widget.dart';
 import 'package:moviedb/presentation/widgets/movie_list_item.dart';
 import 'package:moviedb/presentation/widgets/search_bar/search_bar_widget.dart';
@@ -33,7 +33,6 @@ class HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
-    Color bgTheme = Theme.of(context).scaffoldBackgroundColor;
     late Widget homeBodyWidget = PreviewMovieList(
       tabController: _tabController,
       topRatedMovies: [],
@@ -51,52 +50,27 @@ class HomeScreenState extends State<HomeScreen>
             upComingMovies: state.upComingMovies,
             nowPlayingdMovies: state.nowPlayingdMovies,
           );
-          
         }
-       
+
         if (state is SearchMovies) {
           homeBodyWidget = SearchMovieList(searchMovies: state.searchMovies);
         }
-        return Scaffold(
-          backgroundColor: bgTheme,
-          appBar: AppBar(
-            backgroundColor: bgTheme,
-            title: Padding(
-              padding: EdgeInsets.only(
-                left: 10,
-                right: 10,
+
+        return Container(
+          padding: const EdgeInsets.symmetric(horizontal: 24.0),
+          child: Column(
+            children: [
+              SearchBarWidget(),
+              Flexible(
+                child: homeBodyWidget,
               ),
-              child: const Text(
-                "What do you want to watch?",
-                style: TextStyle(
-                  fontWeight: FontWeight.w600,
-                  fontSize: 18,
-                  color: Color.fromRGBO(255, 255, 255, 1),
-                ),
-              ),
-            ),
-          ),
-          body: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 24.0),
-            child: Column(
-              children: [
-                SearchBarWidget(),
-                Flexible(
-                  child: homeBodyWidget,
-                ),
-              ],
-            ),
-          ),
-          bottomNavigationBar: BottomNavBar(
-            screenIndex: 0,
+            ],
           ),
         );
       },
     );
   }
 }
-
-
 
 class SearchMovieList extends StatelessWidget {
   final List<Movie> searchMovies;
@@ -124,12 +98,14 @@ class PreviewMovieList extends StatelessWidget {
   final List<Movie> nowPlayingdMovies;
   final List<Movie> upComingMovies;
   final List<Movie> popularMovies;
-  PreviewMovieList(
-      {required this.tabController,
-      required this.topRatedMovies,
-      required this.popularMovies,
-      required this.upComingMovies,
-      required this.nowPlayingdMovies});
+
+  PreviewMovieList({
+    required this.tabController,
+    required this.topRatedMovies,
+    required this.popularMovies,
+    required this.upComingMovies,
+    required this.nowPlayingdMovies,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -197,10 +173,9 @@ class BuilderMovies extends StatelessWidget {
       itemCount: movies.length,
       itemBuilder: (context, index) {
         return GestureDetector(
-          onTap: () => Navigator.pushNamed(
-            context,
-            '/movie_detail',
-            arguments: MovieDetailScreenArguments(id: movies[index].id),
+          onTap: () => router.go(
+            AppRoutes.movieDetails,
+            extra: MovieDetailScreenArguments(id: movies[index].id),
           ),
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),

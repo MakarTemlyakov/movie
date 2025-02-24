@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:moviedb/domain/models/rate_movie.dart';
 import 'package:moviedb/presentation/screens/search_screen/bloc/search_screen_bloc_bloc.dart';
-import 'package:moviedb/presentation/widgets/bottom_nav_bar.dart';
 import 'package:moviedb/presentation/widgets/movie_list_item.dart';
 import 'package:moviedb/presentation/widgets/search_bar/search_bar_widget.dart';
 import 'package:moviedb/utils/get_capitalize-text.dart';
@@ -29,65 +28,22 @@ class _SearchScreenState extends State<SearchScreen> {
             ? MovieListDataWidget(movies: state.movies)
             : EmptySearchResult();
       }
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          title: Text(
-            "Search",
-            style: TextStyle(
-              color: Colors.white,
-              fontSize: 16,
-              fontWeight: FontWeight.w600,
-            ),
+      return Container(
+          padding: EdgeInsets.only(
+            top: 16,
+            left: 29,
+            right: 15,
+            bottom: 16,
           ),
-          centerTitle: true,
-          actions: [
-            Padding(
-              padding: EdgeInsets.only(
-                right: 15,
+          child: Column(
+            children: [
+              SearchBarWidget(),
+              SizedBox(
+                height: 24,
               ),
-              child: IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.info_outline),
-                style: ButtonStyle(
-                  iconColor:
-                      WidgetStateProperty.all(Color.fromRGBO(255, 255, 255, 1)),
-                ),
-              ),
-            ),
-          ],
-          leading: Padding(
-            padding: EdgeInsets.only(left: 24),
-            child: IconButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, "/"),
-              icon: Icon(Icons.arrow_back_ios),
-              style: ButtonStyle(
-                iconColor:
-                    WidgetStateProperty.all(Color.fromRGBO(255, 255, 255, 1)),
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomNavBar(
-          screenIndex: 1,
-        ),
-        body: Padding(
-            padding: EdgeInsets.only(
-              top: 16,
-              left: 29,
-              right: 15,
-              bottom: 16,
-            ),
-            child: Column(
-              children: [
-                SearchBarWidget(),
-                SizedBox(
-                  height: 24,
-                ),
-                Expanded(child: searchScreenBody),
-              ],
-            )),
-      );
+              Expanded(child: searchScreenBody),
+            ],
+          ));
     });
   }
 }

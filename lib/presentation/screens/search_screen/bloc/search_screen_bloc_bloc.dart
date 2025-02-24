@@ -10,15 +10,13 @@ class SearchScreenBlocBloc
     extends Bloc<SearchScreenBlocEvent, SearchScreenBlocState> {
   final MovieRepository _movieRepository;
   SearchScreenBlocBloc(this._movieRepository)
-      : super(SearchScreenBlocInitial(movies: [])) {
+      : super(SearchScreenBlocInitial()) {
     on<OnLoadMovieDataEvent>(_onLoadMovieData);
   }
 
   Future<void> _onLoadMovieData(OnLoadMovieDataEvent e, Emitter emit) async {
     final searchMovies =
         await _movieRepository.getSearchMovies(e.searchQuery ?? "");
-    emit(
-      MovieListData(movies: searchMovies),
-    );
+    emit(MovieListData(movies: searchMovies));
   }
 }

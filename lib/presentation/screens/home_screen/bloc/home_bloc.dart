@@ -16,13 +16,14 @@ class HomeBloc extends Bloc<HomeEvent, HomeState> {
   Future<void> _onLoadSearchMovies(OnSearchMovies e, Emitter emit) async {
     if (e.searchQuery == "") {
       this.add(OnLoadMoviesEvent());
-    } else {
-      final searchMovies =
-          await _movieRepository.getSearchMovies(e.searchQuery ?? "");
-      emit(
-        SearchMovies(searchMovies: searchMovies),
-      );
+      return;
     }
+
+    final searchMovies =
+        await _movieRepository.getSearchMovies(e.searchQuery ?? "");
+    emit(
+      SearchMovies(searchMovies: searchMovies),
+    );
   }
 
   Future<void> _onloadMovieList(OnLoadMoviesEvent e, Emitter emit) async {

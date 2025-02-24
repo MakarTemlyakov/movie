@@ -5,7 +5,6 @@ import 'package:moviedb/constants.dart';
 import 'package:moviedb/domain/models/rate_movie.dart';
 import 'package:moviedb/presentation/screens/movie_detail_screen/movie_detail.dart';
 import 'package:moviedb/presentation/screens/watch_list_screen/bloc/watch_list_screen_bloc_bloc.dart';
-import 'package:moviedb/presentation/widgets/bottom_nav_bar.dart';
 import 'package:moviedb/presentation/widgets/movie_list_item.dart';
 import 'package:moviedb/presentation/widgets/watch_list/empty_watch_list_widget.dart';
 
@@ -44,39 +43,8 @@ class _WatchListScreenState extends State<WatchListScreen> {
       } else {
         widgetBody = EmptyWatchListWidget();
       }
-      return Scaffold(
-        appBar: AppBar(
-          backgroundColor: Colors.transparent,
-          centerTitle: true,
-          title: Text(
-            "Watch list",
-            style: TextStyle(
-              color: Color.fromRGBO(
-                255,
-                255,
-                255,
-                1,
-              ),
-              fontSize: 16,
-              fontWeight: FontWeight.w500,
-            ),
-          ),
-          leading: Padding(
-            padding: EdgeInsets.only(left: 24),
-            child: IconButton(
-              onPressed: () => Navigator.pushReplacementNamed(context, "/"),
-              icon: Icon(Icons.arrow_back_ios),
-              style: ButtonStyle(
-                iconColor:
-                    WidgetStateProperty.all(Color.fromRGBO(255, 255, 255, 1)),
-              ),
-            ),
-          ),
-        ),
-        bottomNavigationBar: BottomNavBar(
-          screenIndex: 2,
-        ),
-        body: widgetBody,
+      return Container(
+        child: widgetBody,
       );
     });
   }

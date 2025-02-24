@@ -27,8 +27,7 @@ class WatchListScreenBlocBloc
 
   Future<void> _onLoadData(OnLoadDataEvent event, Emitter emmit) async {
     List<Movie>? watchMovies = [];
-    late RequestToken? requestToken;
-    requestToken = (await _movieRepository.getRequestToken());
+    RequestToken? requestToken = (await _movieRepository.getRequestToken());
 
     if (requestToken != null) {
       watchMovies = await _movieRepository.getWatchListMovies();
