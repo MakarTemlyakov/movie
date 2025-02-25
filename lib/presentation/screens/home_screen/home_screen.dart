@@ -33,6 +33,7 @@ class HomeScreenState extends State<HomeScreen>
 
   @override
   Widget build(BuildContext context) {
+    Color bgTheme = Theme.of(context).scaffoldBackgroundColor;
     late Widget homeBodyWidget = PreviewMovieList(
       tabController: _tabController,
       topRatedMovies: [],
@@ -56,15 +57,34 @@ class HomeScreenState extends State<HomeScreen>
           homeBodyWidget = SearchMovieList(searchMovies: state.searchMovies);
         }
 
-        return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 24.0),
-          child: Column(
-            children: [
-              SearchBarWidget(),
-              Flexible(
-                child: homeBodyWidget,
+        return Scaffold(
+          appBar: AppBar(
+            backgroundColor: bgTheme,
+            title: Padding(
+              padding: EdgeInsets.only(
+                left: 10,
+                right: 10,
               ),
-            ],
+              child: const Text(
+                "What do you want to watch?",
+                style: TextStyle(
+                  fontWeight: FontWeight.w600,
+                  fontSize: 18,
+                  color: Color.fromRGBO(255, 255, 255, 1),
+                ),
+              ),
+            ),
+          ),
+          body: Container(
+            padding: const EdgeInsets.symmetric(horizontal: 24.0),
+            child: Column(
+              children: [
+                SearchBarWidget(),
+                Flexible(
+                  child: homeBodyWidget,
+                ),
+              ],
+            ),
           ),
         );
       },

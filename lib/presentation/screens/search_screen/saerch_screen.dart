@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:moviedb/constants.dart';
 import 'package:moviedb/domain/models/rate_movie.dart';
 import 'package:moviedb/presentation/screens/search_screen/bloc/search_screen_bloc_bloc.dart';
 import 'package:moviedb/presentation/widgets/movie_list_item.dart';
 import 'package:moviedb/presentation/widgets/search_bar/search_bar_widget.dart';
+import 'package:moviedb/routing/app_routing.dart';
 import 'package:moviedb/utils/get_capitalize-text.dart';
 
 class SearchScreen extends StatefulWidget {
@@ -28,21 +30,51 @@ class _SearchScreenState extends State<SearchScreen> {
             ? MovieListDataWidget(movies: state.movies)
             : EmptySearchResult();
       }
-      return Container(
-          padding: EdgeInsets.only(
-            top: 16,
-            left: 29,
-            right: 15,
-            bottom: 16,
-          ),
-          child: Column(
-            children: [
-              SearchBarWidget(),
-              SizedBox(
-                height: 24,
+      return Scaffold(
+          appBar: AppBar(
+            backgroundColor: Colors.transparent,
+            centerTitle: true,
+            title: Text(
+              "Watch list",
+              style: TextStyle(
+                color: Color.fromRGBO(
+                  255,
+                  255,
+                  255,
+                  1,
+                ),
+                fontSize: 16,
+                fontWeight: FontWeight.w500,
               ),
-              Expanded(child: searchScreenBody),
-            ],
+            ),
+            leading: Padding(
+              padding: EdgeInsets.only(left: 24),
+              child: IconButton(
+                onPressed: () => router.go(AppRoutes.home),
+                icon: Icon(Icons.arrow_back_ios),
+                style: ButtonStyle(
+                  iconColor:
+                      WidgetStateProperty.all(Color.fromRGBO(255, 255, 255, 1)),
+                ),
+              ),
+            ),
+          ),
+          body: Container(
+            padding: EdgeInsets.only(
+              top: 16,
+              left: 29,
+              right: 15,
+              bottom: 16,
+            ),
+            child: Column(
+              children: [
+                SearchBarWidget(),
+                SizedBox(
+                  height: 24,
+                ),
+                Expanded(child: searchScreenBody),
+              ],
+            ),
           ));
     });
   }
